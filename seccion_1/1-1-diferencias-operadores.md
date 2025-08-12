@@ -2,7 +2,7 @@
 
 == (Comparación débil): Compara valores después de hacer conversión de tipos automática.
 
-=== (Comparación estricta): Compara valores Y tipos de datos sin conversión
+=== (Comparación estricta): Compara valores y tipos de datos sin conversión.
 
 Ejemplo:
 

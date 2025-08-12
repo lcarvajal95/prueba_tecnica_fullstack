@@ -6,10 +6,10 @@ class UserController {
         $this->db = $database->getPdo();
     }
 
-    /**
-     * GET /usuarios/recientes
-     * Retorna usuarios registrados en los últimos 30 días
-     */
+    /*
+    GET /usuarios/recientes
+    Retorna usuarios registrados en los últimos 30 días
+    */
     public function getUsuariosRecientes(): void {
         header('Content-Type: application/json; charset=utf-8');
 
@@ -47,7 +47,7 @@ class UserController {
                 "status" => "error",
                 "message" => "Error interno al obtener los usuarios recientes",
                 "timestamp" => date("Y-m-d H:i:s"),
-                "debug" => $e->getMessage() // ⚠ En producción podrías eliminar esta línea
+                "debug" => $e->getMessage()
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         }
     }

@@ -16,5 +16,5 @@ try {
     echo json_encode($usuarios);
 
 } catch (PDOException $e) {
-    echo "❌ Error: " . $e->getMessage();
+    echo "Error: " . $e->getMessage();
 }

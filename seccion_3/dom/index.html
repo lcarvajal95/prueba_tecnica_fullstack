@@ -104,11 +104,7 @@
     </div>
 
     <script>
-        /**
-         * Lógica de conversión a mayúsculas (Vanilla JavaScript)
-         * @param {string} texto - Texto a convertir
-         * @returns {string} - Texto en mayúsculas
-         */
+
         function convertirAMayusculas(texto) {
             // Validar entrada
             if (typeof texto !== 'string') {
@@ -119,10 +115,8 @@
             return texto.trim().toUpperCase();
         }
         
-        /**
-         * Valida si el texto ingresado es válido
-         * @param {string} texto 
-         * @returns {object} - {isValid: boolean, message: string}
+        /*
+         Valida si el texto ingresado es válido
          */
         function validarTexto(texto) {
             if (!texto || texto.trim().length === 0) {
@@ -191,7 +185,7 @@
             
             // Evento Enter en el campo de texto
             $('#nombre').on('keypress', function(e) {
-                if (e.which === 13) { // Tecla Enter
+                if (e.which === 13) {
                     $('#btnGuardar').click();
                 }
             });

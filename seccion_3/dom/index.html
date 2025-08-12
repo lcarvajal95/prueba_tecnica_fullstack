@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interacción DOM - jQuery + Vanilla JS</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        #nombre {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        
+        #nombre:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        
+        #btnGuardar {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        #btnGuardar:hover {
+            background-color: #0056b3;
+        }
+        
+        #btnGuardar:active {
+            transform: translateY(1px);
+        }
+        
+        #resultado {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f7ef;
+            border: 1px solid #27ae60;
+            border-radius: 4px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #27ae60;
+            min-height: 20px;
+            display: none;
+        }
+        
+        .error {
+            background-color: #fdf2f2;
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Conversor a Mayúsculas</h1>
+        <p>Ingresa un nombre y haz clic en el botón para convertirlo a mayúsculas.</p>
+        
+        <form id="formulario">
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" placeholder="Ingresa tu nombre aquí...">
+            </div>
+            
+            <button type="button" id="btnGuardar">Convertir a Mayúsculas</button>
+        </form>
+        
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        /**
+         * Lógica de conversión a mayúsculas (Vanilla JavaScript)
+         * @param {string} texto - Texto a convertir
+         * @returns {string} - Texto en mayúsculas
+         */
+        function convertirAMayusculas(texto) {
+            // Validar entrada
+            if (typeof texto !== 'string') {
+                throw new Error('El parámetro debe ser una cadena de texto');
+            }
+            
+            // Limpiar espacios extra y convertir
+            return texto.trim().toUpperCase();
+        }
+        
+        /**
+         * Valida si el texto ingresado es válido
+         * @param {string} texto 
+         * @returns {object} - {isValid: boolean, message: string}
+         */
+        function validarTexto(texto) {
+            if (!texto || texto.trim().length === 0) {
+                return {
+                    isValid: false,
+                    message: 'Por favor, ingresa un nombre'
+                };
+            }
+            
+            if (texto.trim().length < 2) {
+                return {
+                    isValid: false,
+                    message: 'El nombre debe tener al menos 2 caracteres'
+                };
+            }
+            
+            return {
+                isValid: true,
+                message: ''
+            };
+        }
+        
+        // Manejo de eventos con jQuery
+        $(document).ready(function() {
+            console.log('DOM cargado - jQuery inicializado');
+            
+            // Evento click del botón usando jQuery
+            $('#btnGuardar').on('click', function() {
+                // Obtener valor del campo
+                const nombreIngresado = $('#nombre').val();
+                const $resultado = $('#resultado');
+                
+                try {
+                    // Validar usando función vanilla JS
+                    const validacion = validarTexto(nombreIngresado);
+                    
+                    if (!validacion.isValid) {
+                        // Mostrar error
+                        $resultado
+                            .removeClass('error')
+                            .addClass('error')
+                            .text(validacion.message)
+                            .fadeIn(300);
+                        return;
+                    }
+                    
+                    // Convertir a mayúsculas usando función vanilla JS
+                    const nombreEnMayusculas = convertirAMayusculas(nombreIngresado);
+                    
+                    // Mostrar resultado exitoso
+                    $resultado
+                        .removeClass('error')
+                        .html(`<strong>Resultado:</strong> ${nombreEnMayusculas}`)
+                        .fadeIn(300);
+                    
+                    console.log(`Conversión exitosa: "${nombreIngresado}" → "${nombreEnMayusculas}"`);
+                    
+                } catch (error) {
+                    console.error('Error en la conversión:', error.message);
+                    $resultado
+                        .addClass('error')
+                        .text('Error interno: ' + error.message)
+                        .fadeIn(300);
+                }
+            });
+            
+            // Evento Enter en el campo de texto
+            $('#nombre').on('keypress', function(e) {
+                if (e.which === 13) { // Tecla Enter
+                    $('#btnGuardar').click();
+                }
+            });
+            
+            // Limpiar resultado cuando se modifica el input
+            $('#nombre').on('input', function() {
+                $('#resultado').fadeOut(200);
+            });
+            
+            // Focus automático al cargar la página
+            $('#nombre').focus();
+        });
+    </script>
+</body>
+</html>
